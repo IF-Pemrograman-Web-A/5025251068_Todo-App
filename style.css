@@ -1,0 +1,113 @@
+* {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    background-color: aliceblue;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1em;
+    border-bottom: 0.2em double black;
+    min-width: 20em;
+    position: sticky;
+}
+
+header>h2 {
+    text-align: center;
+    margin-bottom: 0.2em;
+}
+
+header>p {
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex: 0 0 100%;
+    padding: 2em;
+}
+
+.left-panel {
+    justify-content: center;
+    border: 1px solid rgba(105, 105, 105, 0.418);
+    background-color: bisque;
+    flex: 0 0 50%;
+    flex-flow: column wrap;
+    text-align: center;
+    padding-bottom: 3em;
+    min-width: 20em;
+}
+
+.left-panel-title {
+    text-align: center;
+}
+
+.task-list {
+    margin-left: 1em;
+    text-align: left;
+    flex-direction: row;
+}
+
+.task-item-button {
+    border-radius: 20%;
+    height: 3em;
+    background-color: limegreen;
+    color: whitesmoke;
+}
+
+.right-panel {
+    flex: 0 0 50%;
+    border: 1px solid rgba(105, 105, 105, 0.418);
+    background-color: bisque;
+    flex-flow: column wrap;
+    padding-bottom: 3em;
+    min-width: 20em;
+    text-align: center;
+}
+
+.task-details {
+    border-bottom: 1px solid rgba(105, 105, 105, 0.418);
+}
+
+.task-details-details {
+    text-align: left;
+    margin: 1em;
+}
+
+.add-new-tasks {
+    margin-left: 5em;
+}
+
+.form-group {
+    margin-bottom: 1em;
+    text-align: left;
+}
+
+.form-task-button {
+    height: 5em;
+    width: 10em;
+    min-height: 3em;
+    min-width: 6em;
+    background-color: lightseagreen;
+}
+
+footer {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+}
+
+@media (max-width: 768px){
+  main {
+    flex-direction: column;
+  }
+  
+  section {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+}

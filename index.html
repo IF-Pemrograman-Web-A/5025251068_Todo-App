@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Simple Todo App</title>
+</head>
+<body>
+    <header>
+        <h2>My Todo</h2>
+        <p>Simply a todo list</p>
+    </header>
+
+    <main>            
+        <section class="left-panel">
+            <div>
+                <div>
+                    <h2 class="left-panel-title">Active Tasks</h2>
+                </div>
+                <ul class="task-list">
+                    <li class="task-item">
+                        <h3 class="task-item-title">Tugas Pemrograman Web</h3>
+                        <p class="task-item-desc"><strong>Website</strong></p>
+                        <p class="task-deadline"><time>14 September 2026 20:00</time></p>
+                        <button type="button" class="task-item-button"><strong>Mark as Done</strong></button>
+                    </li>
+                    <li class="task-item">
+                        <h3 class="task-item-title">Tugas Matematika Diskrit</h3>
+                        <p class="task-item-desc"><strong>Tugas Kelompok Ke-3</strong></p>
+                        <p class="task-deadline"><time>21 September 2026 12:00</time></p>
+                        <button type="button" class="task-item-button"><strong>Mark as Done</strong></button>
+                    </li>
+                    <li class="task-item">
+                        <h3 class="task-item-title">Tugas KPPL</h3>
+                        <p class="task-item-desc"><strong>Random trivia</strong></p>
+                        <p class="task-deadline"><time>15 September 2026 12:00</time></p>
+                        <button type="button" class="task-item-button"><strong>Mark as Done</strong></button>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <aside class="right-panel">
+            <div class="task-details">
+                <h2 class="task-details-title">Current Task Details</h2>
+                <div class="task-details-details">
+                    <h3 class="task-details-task-name"><strong>Task Name: </strong>Tugas Pemrograman Web</h3>
+                    <p class="task-details-task-desc"><strong>Tag: Website</strong>
+                        <br>
+                        <br>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                        Sit, cum officia ea recusandae asperiores delectus odit maiores aut odio ipsam ducimus impedit nulla dolores tempora aperiam harum, 
+                        deleniti unde dicta?
+                    </p>
+                    <p class="task-details-task-deadline"><strong>Deadline: </strong><time>14 September 2026 20:00</time></p>
+                </div>
+            </div>
+            <h2 class="right-panel-title">Add New Task</h2>
+            <div class="add-new-tasks">
+                <form action="#" class="new-tasks-form">
+                    <div class="form-group">
+                        <label for="task-name">Task Name:</label>
+                        <input type="text" class="form-task-name" id="form-task-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="task-tag">Task Tag:</label>
+                        <input type="text" class="form-task-tag" id="form-task-tag">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Description:</label>
+                        <textarea type="textarea" class="form-task-desc" id="form-task-desc"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Deadline:</label>
+                        <input type="date" class="form-task-deadline" id="form-task-deadline">
+                    </div>
+                    <button type="submit" class="form-task-button"><h2><b>Add Task</b></h2></button>
+                </form>
+            </div>
+        </aside>
+    </main>
+    
+    <footer>
+        <p class="footer-name">Made in haste by: <strong>Satya Mahardika Sandyaditama / 5025251068</strong></p>
+        <p class="footer-for">For: <strong>Pemrograman Web A Tugas E01a</strong></p>
+    </footer>
+</body>
+</html>
