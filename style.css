@@ -52,11 +52,22 @@ main {
     flex-direction: row;
 }
 
-.task-item-button {
+ul > li > button {
     border-radius: 20%;
     height: 3em;
-    background-color: limegreen;
     color: whitesmoke;
+}
+
+.task-item-button-edit {
+    background-color: rgb(235, 152, 0);
+}
+
+.task-item-button-preview {
+    background-color: rgb(0, 67, 192);
+}
+
+.task-item-checkmark-done {
+    color: green;
 }
 
 .right-panel {
