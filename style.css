@@ -124,6 +124,23 @@ ul > li > button {
     color: var(--text-color);
 }
 
+#camera-video {
+    width: 10rem;          
+    max-width: 320px;     
+    height: auto;         
+    background: #000;
+    display: block;
+    margin-bottom: 10px;
+}
+
+#camera-canvas {
+    width: 10rem;          
+    max-width: 320px;
+    height: auto;
+    display: none;
+    border: 1px solid #ccc;
+}
+
 footer {
     display: flex;
     flex-flow: column wrap;
