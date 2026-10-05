@@ -1,4 +1,4 @@
-# 5025251068_Todo-App [Task E02a Pemrograman Web A]
+# 5025251068_Todo-App [Task E03 Pemrograman Web A]
 
 
 ## Identitas
@@ -48,24 +48,30 @@ Berupa komponen di bagian bawah website yang berisi detail pembuat website dan k
 
 #### 1. Mode Desktop
 
-![Desktop Preview](<Screenshot 2026-09-14 194806.png>)
+##### Light Mode
+
+<img width="1901" height="907" alt="image" src="https://github.com/user-attachments/assets/5997de59-6800-455b-84c1-4d13de13b809" />
+
+##### Dark Mode
+
+<img width="1919" height="906" alt="image" src="https://github.com/user-attachments/assets/bb4a0db0-2296-4aad-a79f-8ae338ebd00d" />
 
 #### 2. Mode Mobile
 
-![Mobile Preview1](<Screenshot 2026-09-14 194843.png>)
+##### Light Mode
 
-![Mobile Preview2](<Screenshot 2026-09-14 194849.png>)
+<img width="419" height="843" alt="image" src="https://github.com/user-attachments/assets/c6802110-4937-4e80-ab64-fbd6168f5414" />
 
-### Preview Per Komponen Utama
+<img width="422" height="839" alt="image" src="https://github.com/user-attachments/assets/1a8170d7-7183-46ba-95f4-f23dad9fe6c0" />
 
-#### 1. Daftar Tugas
+##### Dark Mode
 
-![ToDoList](image.png)
+<img width="423" height="845" alt="image" src="https://github.com/user-attachments/assets/bf5a3946-680b-4f9f-895f-a23412759b30" />
 
-#### 2. Detail Tugas
+<img width="422" height="845" alt="image" src="https://github.com/user-attachments/assets/5f3b2dbc-0543-45b9-9bd6-025d531e359c" />
 
-![ToDoDetails](image-1.png)
+<img width="428" height="842" alt="image" src="https://github.com/user-attachments/assets/88e03a05-5c12-4b48-a619-b35940a0afec" />
 
-#### 3. Form Pencatatan Tugas
+### Video Contoh
 
-![Form](image-2.png)
+Uploading Screen Recording 2026-10-05 200614.mp4…
