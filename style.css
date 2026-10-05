@@ -2,8 +2,22 @@
     font-family: 'Courier New', Courier, monospace;
 }
 
+:root {
+    --bg-color: rgb(254, 255, 210);
+    --primary-color: rgb(255, 191, 120);
+    --second-color: rgb(255, 125, 41);
+    --text-color: black;
+}
+
+[data-theme="dark"] {
+  --bg-color: rgb(72, 30, 20);
+  --primary-color: rgb(155, 57, 34);
+  --second-color: rgb(242, 97, 63);
+  --text-color: #f0f0f0;
+}
+
 body {
-    background-color: aliceblue;
+    background-color: var(--bg-color);
 }
 
 header {
@@ -11,9 +25,10 @@ header {
     flex-direction: column;
     justify-content: center;
     padding: 1em;
-    border-bottom: 0.2em double black;
+    border-bottom: 0.2em double var(--text-color);
     min-width: 20em;
     position: sticky;
+    color: var(--text-color);
 }
 
 header>h2 {
@@ -34,7 +49,8 @@ main {
 .left-panel {
     justify-content: center;
     border: 1px solid rgba(105, 105, 105, 0.418);
-    background-color: bisque;
+    background-color: var(--primary-color);
+    color: var(--text-color);
     flex: 0 0 50%;
     flex-flow: column wrap;
     text-align: center;
@@ -73,7 +89,8 @@ ul > li > button {
 .right-panel {
     flex: 0 0 50%;
     border: 1px solid rgba(105, 105, 105, 0.418);
-    background-color: bisque;
+    background-color: var(--primary-color);
+    color: var(--text-color);
     flex-flow: column wrap;
     padding-bottom: 3em;
     min-width: 20em;
@@ -103,13 +120,15 @@ ul > li > button {
     width: 10em;
     min-height: 3em;
     min-width: 6em;
-    background-color: lightseagreen;
+    background-color: var(--second-color);
+    color: var(--text-color);
 }
 
 footer {
     display: flex;
     flex-flow: column wrap;
     align-items: center;
+    color: var(--text-color);
 }
 
 @media (max-width: 768px){
