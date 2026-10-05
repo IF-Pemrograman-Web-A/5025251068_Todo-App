@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tagVal = tagInput.value.trim();
         const descVal = descInput.value.trim();
         const deadlineVal = deadlineInput.value;
-        const notificationVal = notificationInput.value;
+        const notificationVal = notificationInput ? notificationInput.value : '';
         const imageToSave = capturedImageData || null;
 
         saveTodoToDB(nameVal, tagVal, descVal, deadlineVal, notificationVal, imageToSave);
@@ -151,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveTodoToDB(name, tag, description, deadline, notification, image) {
         const transaction = db.transaction(['todos'], 'readwrite');
         const store = transaction.objectStore('todos');
-        
         const todoData = { name, tag, description, deadline, notification, image };
 
         if (editingTaskItem) {
@@ -165,6 +164,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         transaction.oncomplete = () => {
             loadTodosFromDB();
+
+            if ('serviceWorker' in navigator && Notification.permission === 'granted') {
+                navigator.serviceWorker.ready.then((registration) => {
+                    registration.showNotification("SimplyTodo Reminder", {
+                        body: `Task "${name}" is set for ${deadline || 'soon'}!`,
+                        icon: image || './favicon.ico' // optional fallback icon
+                    });
+                });
+            }
+
             taskForm.reset();
             capturedImageData = null;
             if (cameraCanvas) cameraCanvas.style.display = 'none';
@@ -242,6 +251,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
     });
+
+    if ('Notification' in window && Notification.permission !== 'granted') {
+        Notification.requestPermission();
+    }
 
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
