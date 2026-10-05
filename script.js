@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         newTaskItem.className = 'task-item';
         newTaskItem.setAttribute('data-id', todo.id);
         newTaskItem.setAttribute('data-description', todo.description || 'No description provided.');
+        newTaskItem.setAttribute('data-image', todo.image || '');
         
         let imageHTML = todo.image ? `<br><img src="${todo.image}" alt="Captured Task Image" style="max-width:100px; margin-top:5px; border-radius:4px;">` : '';
 
@@ -180,9 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const tagText = taskItem.querySelector('.task-item-desc').textContent;
             const deadline = taskItem.querySelector('.task-deadline time').textContent;
             const description = taskItem.getAttribute('data-description') || 'No description provided.';
+            const taskImage = taskItem.getAttribute('data-image');
+            let imagePreviewHTML = taskImage ? `<br><br><img src="${taskImage}" alt="Task Detail Image" style="max-width:200px; border-radius:4px;">` : '';
 
             detailTitle.innerHTML = `<strong>Task Name: </strong>${name}`;
-            detailDesc.innerHTML = `<strong>${tagText}</strong><br><br>${description}`;
+            detailDesc.innerHTML = `<strong>${tagText}</strong><br><br>${description}${imagePreviewHTML}`;
             detailDeadline.innerHTML = `<strong>Deadline: </strong><time>${deadline}</time>`;
             return;
         }
