@@ -1,9 +1,9 @@
 const CACHE_NAME = 'simply-todo-v1';
 const assetsToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/script.js'
+  './',
+  './index.html',
+  './style.css',
+  './script.js'
 ];
 
 self.addEventListener('install', (event) => {
