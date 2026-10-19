@@ -158,3 +158,89 @@ footer {
     margin-bottom: 15px;
   }
 }
+/* ===== Tambahan untuk versi PHP (E04) ===== */
+
+/* Skip to content (accessibility) */
+.skip-to-content {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--second-color);
+    color: var(--text-color);
+    padding: 0.5em 1em;
+    z-index: 10;
+}
+
+.skip-to-content:focus {
+    left: 0;
+}
+
+/* Menu bar Personal / Shared */
+.menu-bar {
+    border-bottom: 0.2em double var(--text-color);
+}
+
+.menu-bar ul {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    list-style: none;
+    margin: 0;
+    padding: 0.8em;
+}
+
+.menu-bar a {
+    display: inline-block;
+    padding: 0.5em 1.5em;
+    border: 1px solid var(--text-color);
+    border-radius: 0.5em;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.menu-bar a.active {
+    background-color: var(--second-color);
+}
+
+.menu-bar a:hover,
+.menu-bar a:focus {
+    background-color: var(--primary-color);
+    outline: 2px solid var(--text-color);
+}
+
+/* List task */
+.task-list {
+    list-style: none;
+    padding: 0;
+}
+
+.task-item {
+    border-bottom: 1px dashed var(--text-color);
+    padding: 0.8em 1em;
+}
+
+.task-empty {
+    padding: 1em;
+    text-align: center;
+}
+
+.done-form {
+    display: inline-block;
+    margin-left: 0.5em;
+}
+
+.flash {
+    margin: 0.5em 1em;
+    padding: 0.5em;
+    border: 1px solid var(--text-color);
+    border-radius: 0.3em;
+}
+
+header {
+    align-items: center;
+}
+
+footer p {
+    color: var(--text-color);
+}

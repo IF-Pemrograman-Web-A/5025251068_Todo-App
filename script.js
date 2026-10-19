@@ -1,77 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const mainEl = document.getElementById('main-content');
     const taskForm = document.querySelector('.new-tasks-form');
     const taskList = document.querySelector('.task-list');
-    
+
     const submitBtnText = document.querySelector('.form-task-button b');
+    const formTitle = document.getElementById('form-title');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
     const detailTitle = document.querySelector('.task-details-task-name');
     const detailDesc = document.querySelector('.task-details-task-desc');
     const detailDeadline = document.querySelector('.task-details-task-deadline');
 
+    const idInput = document.getElementById('form-task-id');
     const nameInput = document.getElementById('form-task-name');
     const tagInput = document.getElementById('form-task-tag');
     const descInput = document.getElementById('form-task-desc');
     const deadlineInput = document.getElementById('form-task-deadline');
     const notificationInput = document.getElementById('form-task-notification');
-    const notificationVal = notificationInput ? notificationInput.value : '';
+    const existingImageInput = document.getElementById('form-task-existing-image');
+    const imageDataInput = document.getElementById('form-task-image-data');
 
-    let editingTaskItem = null;
-    let db;
-
-    const request = indexedDB.open('SimplyTodoDB', 1);
-
-    request.onerror = (event) => {
-        console.error("IndexedDB error:", event.target.error);
-    };
-
-    request.onsuccess = (event) => {
-        db = event.target.result;
-        loadTodosFromDB();
-    };
-
-    request.onupgradeneeded = (event) => {
-        const dbInstance = event.target.result;
-        if (!dbInstance.objectStoreNames.contains('todos')) {
-            dbInstance.createObjectStore('todos', { keyPath: 'id', autoIncrement: true });
-        }
-    };
-
-    function loadTodosFromDB() {
-        if (!db) return;
-        taskList.innerHTML = ''; 
-        const transaction = db.transaction(['todos'], 'readonly');
-        const store = transaction.objectStore('todos');
-        const request = store.getAll();
-
-        request.onsuccess = (event) => {
-            const todos = event.target.result;
-            todos.forEach(todo => renderTaskElement(todo));
-        };
-    }
-
-
-    function renderTaskElement(todo) {
-        const newTaskItem = document.createElement('li');
-        newTaskItem.className = 'task-item';
-        newTaskItem.setAttribute('data-id', todo.id);
-        newTaskItem.setAttribute('data-description', todo.description || 'No description provided.');
-        newTaskItem.setAttribute('data-image', todo.image || '');
-        
-        let imageHTML = todo.image ? `<br><img src="${todo.image}" alt="Captured Task Image" style="max-width:100px; margin-top:5px; border-radius:4px;">` : '';
-
-        newTaskItem.innerHTML = `
-            <h3 class="task-item-title">${todo.name}</h3>
-            <p class="task-item-desc"><strong>Tag: ${todo.tag || 'General'}</strong>${imageHTML}</p>
-            <p class="task-deadline"><time>${todo.deadline || 'No deadline'}</time></p>
-            <button type="button" class="task-item-button-preview"><strong>Preview Task</strong></button>
-            <button type="button" class="task-item-button-edit"><strong>Edit Task</strong></button>
-            <label class="checkbox-container">
-                <input type="checkbox" class="task-item-checkmark-done">
-                <span class="checkmark">Mark As Done</span>
-            </label>
-        `;
-        taskList.appendChild(newTaskItem);
-    }
-
+    /* ---------- Camera (Media Capture and Stream API + Canvas API) ---------- */
     const cameraVideo = document.getElementById('camera-video');
     const cameraCanvas = document.getElementById('camera-canvas');
     const startVideoBtn = document.getElementById('start-video-btn');
@@ -80,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let streaming = false;
     let width = 320;
     let height = 0;
-    let capturedImageData = null;
+    let cameraStream = null;
 
     async function getStream() {
         return await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
@@ -91,19 +39,30 @@ document.addEventListener('DOMContentLoaded', () => {
         cameraVideo.play();
     }
 
+    function cameraStop() {
+        if (cameraStream) {
+            cameraStream.getTracks().forEach((track) => track.stop());
+            cameraStream = null;
+        }
+        cameraVideo.srcObject = null;
+        streaming = false;
+        startVideoBtn.style.display = 'inline-block';
+        takeButton.style.display = 'none';
+    }
+
     startVideoBtn.addEventListener('click', async () => {
         try {
-            const stream = await getStream();
-            cameraLaunch(stream);
+            cameraStream = await getStream();
+            cameraLaunch(cameraStream);
             startVideoBtn.style.display = 'none';
             takeButton.style.display = 'inline-block';
         } catch (err) {
-            console.error("Error accessing media devices.", err);
-            alert("Could not start camera.");
+            console.error('Error accessing media devices.', err);
+            alert('Could not start camera.');
         }
     });
 
-    cameraVideo.addEventListener('canplay', (ev) => {
+    cameraVideo.addEventListener('canplay', () => {
         if (!streaming) {
             height = cameraVideo.videoHeight / (cameraVideo.videoWidth / width);
             if (isNaN(height)) {
@@ -117,128 +76,96 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, false);
 
-    function cameraTakePicture() {
+    takeButton.addEventListener('click', () => {
         const context = cameraCanvas.getContext('2d');
         if (width && height) {
             cameraCanvas.width = width;
             cameraCanvas.height = height;
             context.drawImage(cameraVideo, 0, 0, width, height);
-            
-            const data = cameraCanvas.toDataURL('image/png');
             cameraCanvas.style.display = 'block';
-            capturedImageData = data; 
-            return data;
+            // Dikirim ke PHP lewat hidden input, lalu disimpan sebagai file di uploads/
+            imageDataInput.value = cameraCanvas.toDataURL('image/png');
         }
-    }
-
-    takeButton.addEventListener('click', () => {
-        cameraTakePicture();
     });
 
-    taskForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        const nameVal = nameInput.value.trim();
-        const tagVal = tagInput.value.trim();
-        const descVal = descInput.value.trim();
-        const deadlineVal = deadlineInput.value;
-        const notificationVal = notificationInput ? notificationInput.value : '';
-        const imageToSave = capturedImageData || null;
-
-        saveTodoToDB(nameVal, tagVal, descVal, deadlineVal, notificationVal, imageToSave);
-    });
-
-    function saveTodoToDB(name, tag, description, deadline, notification, image) {
-        const transaction = db.transaction(['todos'], 'readwrite');
-        const store = transaction.objectStore('todos');
-        const todoData = { name, tag, description, deadline, notification, image };
-
-        if (editingTaskItem) {
-            todoData.id = Number(editingTaskItem.getAttribute('data-id'));
-            store.put(todoData);
-            editingTaskItem = null;
-            if (submitBtnText) submitBtnText.textContent = 'Add Task';
-        } else {
-            store.add(todoData);
-        }
-
-        transaction.oncomplete = () => {
-            loadTodosFromDB();
-
-            if ('serviceWorker' in navigator && Notification.permission === 'granted') {
-                navigator.serviceWorker.ready.then((registration) => {
-                    registration.showNotification("SimplyTodo Reminder", {
-                        body: `Task "${name}" is set for ${deadline || 'soon'}!`,
-                        icon: image || './favicon.ico' // optional fallback icon
-                    });
-                });
-            }
-
-            taskForm.reset();
-            capturedImageData = null;
-            if (cameraCanvas) cameraCanvas.style.display = 'none';
-        };
+    /* ---------- Preview & Edit (data dari atribut data-* hasil render PHP) ---------- */
+    function resetForm() {
+        taskForm.reset();
+        idInput.value = '';
+        existingImageInput.value = '';
+        imageDataInput.value = '';
+        cameraCanvas.style.display = 'none';
+        if (submitBtnText) submitBtnText.textContent = 'Add Task';
+        if (formTitle) formTitle.textContent = 'Add New Task';
+        cancelEditBtn.style.display = 'none';
+        cameraStop();
     }
 
     taskList.addEventListener('click', (event) => {
-        const target = event.target;
-        const previewBtn = target.closest('.task-item-button-preview');
+        const taskItem = event.target.closest('.task-item');
+        if (!taskItem) return;
+        const data = taskItem.dataset;
 
-        if (previewBtn) {
-            const taskItem = previewBtn.closest('.task-item');
-            const name = taskItem.querySelector('.task-item-title').textContent;
-            const tagText = taskItem.querySelector('.task-item-desc').textContent;
-            const deadline = taskItem.querySelector('.task-deadline time').textContent;
-            const description = taskItem.getAttribute('data-description') || 'No description provided.';
-            const taskImage = taskItem.getAttribute('data-image');
-            let imagePreviewHTML = taskImage ? `<br><br><img src="${taskImage}" alt="Task Detail Image" style="max-width:200px; border-radius:4px;">` : '';
+        if (event.target.closest('.task-item-button-preview')) {
+            const tag = data.tag || 'General';
+            const deadline = data.deadline || 'No deadline';
+            const description = data.description || 'No description provided.';
 
-            detailTitle.innerHTML = `<strong>Task Name: </strong>${name}`;
-            detailDesc.innerHTML = `<strong>${tagText}</strong><br><br>${description}${imagePreviewHTML}`;
-            detailDeadline.innerHTML = `<strong>Deadline: </strong><time>${deadline}</time>`;
+            // textContent supaya aman dari XSS
+            detailTitle.textContent = '';
+            detailTitle.append(strong('Task Name: '), document.createTextNode(data.name));
+
+            detailDesc.textContent = '';
+            detailDesc.append(strong('Tag: ' + tag), document.createElement('br'),
+                document.createElement('br'), document.createTextNode(description));
+            if (data.image) {
+                const img = document.createElement('img');
+                img.src = data.image;
+                img.alt = 'Task detail image';
+                img.style.cssText = 'max-width:200px; border-radius:4px; display:block; margin-top:8px;';
+                detailDesc.append(img);
+            }
+
+            detailDeadline.textContent = '';
+            const time = document.createElement('time');
+            time.textContent = deadline;
+            detailDeadline.append(strong('Deadline: '), time);
             return;
         }
 
-        const editBtn = target.closest('.task-item-button-edit');
-        if (editBtn) {
-            const taskItem = editBtn.closest('.task-item');
-            const name = taskItem.querySelector('.task-item-title').textContent;
-            let tag = taskItem.querySelector('.task-item-desc').textContent.replace(/^Tag:\s*/i, '').trim();
-            const deadline = taskItem.querySelector('.task-deadline time').textContent;
-            const description = taskItem.getAttribute('data-description') || '';
+        if (event.target.closest('.task-item-button-edit')) {
+            idInput.value = data.id;
+            nameInput.value = data.name;
+            tagInput.value = data.tag || '';
+            descInput.value = data.description || '';
+            deadlineInput.value = data.deadline || '';
+            notificationInput.value = data.notification || '';
+            existingImageInput.value = data.image || '';
+            imageDataInput.value = '';
 
-            nameInput.value = name;
-            tagInput.value = tag === 'General' ? '' : tag;
-            descInput.value = description === 'No description provided.' ? '' : description;
-            deadlineInput.value = deadline === 'No deadline' ? '' : deadline;
-
-            editingTaskItem = taskItem;
             if (submitBtnText) submitBtnText.textContent = 'Update Task';
-            return;
+            if (formTitle) formTitle.textContent = 'Edit Task';
+            cancelEditBtn.style.display = 'inline-block';
+            nameInput.focus();
         }
     });
 
+    function strong(text) {
+        const el = document.createElement('strong');
+        el.textContent = text;
+        return el;
+    }
+
+    cancelEditBtn.addEventListener('click', resetForm);
+
+    /* ---------- Mark As Done -> submit form POST ke actions/delete.php ---------- */
     taskList.addEventListener('change', (event) => {
         if (event.target.classList.contains('task-item-checkmark-done')) {
-            const taskItem = event.target.closest('.task-item');
-            if (taskItem) {
-                const id = Number(taskItem.getAttribute('data-id'));
-                const transaction = db.transaction(['todos'], 'readwrite');
-                const store = transaction.objectStore('todos');
-                store.delete(id);
-
-                transaction.oncomplete = () => {
-                    if (taskItem === editingTaskItem) {
-                        editingTaskItem = null;
-                        taskForm.reset();
-                        if (submitBtnText) submitBtnText.textContent = 'Add Task';
-                    }
-                    taskItem.remove();
-                };
-            }
+            event.target.closest('form').submit();
         }
     });
 
+    /* ---------- Theme toggle ---------- */
     const toggleBtn = document.getElementById('theme-toggle');
     const savedTheme = localStorage.getItem('theme') || 'light';
     if (savedTheme === 'dark') {
@@ -246,25 +173,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     toggleBtn.addEventListener('click', () => {
-        let currentTheme = document.documentElement.getAttribute('data-theme');
-        let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
     });
 
-    if ('Notification' in window && Notification.permission !== 'granted') {
+    /* ---------- Notification API + Service Worker ---------- */
+    if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission();
     }
 
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then((registration) => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                })
-                .catch((error) => {
-                    console.error('ServiceWorker registration failed: ', error);
-                });
+    // Setelah PHP redirect dari save.php, tampilkan notifikasi untuk task yang baru disimpan
+    const flashName = mainEl ? mainEl.dataset.flashName : '';
+    if (flashName && 'serviceWorker' in navigator && 'Notification' in window && Notification.permission === 'granted') {
+        const flashDeadline = mainEl.dataset.flashDeadline;
+        navigator.serviceWorker.ready.then((registration) => {
+            registration.showNotification('SimplyTodo Reminder', {
+                body: `Task "${flashName}" is set for ${flashDeadline || 'soon'}!`,
+                icon: './favicon.ico'
+            });
         });
+    }
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+            .then((registration) => {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            })
+            .catch((error) => {
+                console.error('ServiceWorker registration failed: ', error);
+            });
     }
 });
