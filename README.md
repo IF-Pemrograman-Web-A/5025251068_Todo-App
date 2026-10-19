@@ -1,4 +1,4 @@
-# 5025251068_Todo-App [Task E02a Pemrograman Web A]
+# 5025251068_Todo-App [Task E04 Pemrograman Web A]
 
 
 ## Identitas
@@ -44,28 +44,12 @@ Berupa komponen di bagian bawah website yang berisi detail pembuat website dan k
 
 ## Preview Website
 
-### Preview Umum
+## Demonstrasi CRUD
 
-#### 1. Mode Desktop
+### 1. Create
 
-![Desktop Preview](<Screenshot 2026-09-14 194806.png>)
+### 2. Update
 
-#### 2. Mode Mobile
+### 3. Delete
 
-![Mobile Preview1](<Screenshot 2026-09-14 194843.png>)
-
-![Mobile Preview2](<Screenshot 2026-09-14 194849.png>)
-
-### Preview Per Komponen Utama
-
-#### 1. Daftar Tugas
-
-![ToDoList](image.png)
-
-#### 2. Detail Tugas
-
-![ToDoDetails](image-1.png)
-
-#### 3. Form Pencatatan Tugas
-
-![Form](image-2.png)
+## Preview Database
