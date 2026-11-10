@@ -1,4 +1,4 @@
-# 5025251068_Todo-App [Task E04 Pemrograman Web A]
+# 5025251068_Todo-App [Task E05 Pemrograman Web A]
 
 
 ## Identitas
@@ -11,7 +11,7 @@
 
 SimplyTodo adalah sebuah website statis yang berbentuk antarmuka manajemen todo list sederhana yang diharapkan dapat membantu pengguna dalam mengatur tugas-tugas yang perlu diselesaikan. Website ini dikerjakan sebagai bagian dari kelas Pemrograman Web A.
 
-Pada update E04, website ini menerapkan halaman index modular serta integrasi PHP untuk CRUD 
+Pada update E05, website ini diubah menjadi Progressive Web App (PWA) dengan menggunakan app manifest serta dapat dilihat secara offline menggunakan cache Network-First. 
 
 ## Struktur
 
@@ -22,6 +22,8 @@ todo-php/
 |-- style.css
 |-- script.js
 |-- sw.js
+|-- manifest.json
+|-- offline.html
 |-- includes/
 |   |-- header.php
 │   |-- menu-bar.php     
@@ -33,44 +35,30 @@ todo-php/
 `-- uploads/             
 ```
 
-## Preview Website
+## Fitur PWA
 
-### 1. Mode Personal
-      
-  <img width="1919" height="913" alt="image" src="https://github.com/user-attachments/assets/76f5c914-6884-45c6-85bd-519d31da51aa" />
+- Web App Manifest (`manifest.json`) dengan ikon 192x192 dan 512x512, display `standalone`
+- Service Worker (`sw.js`): precache app shell + `offline.html`
+- Strategi cache per resource:
+  - Halaman PHP: Network First (data dari database harus terbaru, cache hanya cadangan)
+  - CSS/JS: Stale-While-Revalidate
+  - Foto `uploads/`: Cache First (nama file acak, isi tidak berubah)
+- Tombol Install App (`beforeinstallprompt`) dengan fallback petunjuk manual
 
-### 2. Mode Shared
+## Bukti PWA
 
-  <img width="1919" height="910" alt="image" src="https://github.com/user-attachments/assets/f259c7ce-4b18-4da8-87b1-0ea552698511" />
+### App Manifest
 
-## Demonstrasi CRUD
+### Cache App Shell
 
-### 1. Create
+### Request Offline
 
-  
+1. Page tidak ada di cache
 
+2. Page ada di cache
 
-https://github.com/user-attachments/assets/013458f4-0ecc-47fb-b763-fc006f2f176a
+### App Install
 
+1. Install Prompt di Chrome
 
-
-
-### 2. Update
-
-
-
-https://github.com/user-attachments/assets/7bf295fe-6614-4796-9819-0b4546e426ce
-
-
-
-### 3. Delete
-
-
-
-https://github.com/user-attachments/assets/5e7f286a-5825-43c8-8fb3-78e309e7c8b4
-
-
-
-## Preview Database
-
-<img width="1919" height="1010" alt="image" src="https://github.com/user-attachments/assets/e0dea200-f8e6-43f9-8823-d02d611665b0" />
+2. Setelah di install

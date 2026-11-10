@@ -172,6 +172,37 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.setAttribute('data-theme', 'dark');
     }
 
+    /* ---------- Install button (PWA) ---------- */
+    let deferredPrompt = null;
+    const installBtn = document.getElementById('install-button');
+    const installHint = document.getElementById('install-hint');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();          // tahan dialog bawaan
+        deferredPrompt = e;          // simpan untuk dipakai nanti
+        installBtn.hidden = false;
+        installHint.hidden = true;
+    });
+
+    installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();             // munculkan dialog install
+        await deferredPrompt.userChoice;     // tunggu pilihan user
+        deferredPrompt = null;               // event hanya bisa dipakai sekali
+        installBtn.hidden = true;
+    });
+
+    window.addEventListener('appinstalled', () => {
+        installBtn.hidden = true;
+        deferredPrompt = null;
+    });
+
+    // Fallback: browser tanpa beforeinstallprompt (Safari/Firefox)
+    if (!('onbeforeinstallprompt' in window) &&
+        !window.matchMedia('(display-mode: standalone)').matches) {
+        installHint.hidden = false;
+    }
+
     toggleBtn.addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';

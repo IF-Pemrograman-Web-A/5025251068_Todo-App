@@ -1,0 +1,16 @@
+{
+  "id": "./?source=pwa",
+  "start_url": "./index.php?source=pwa",
+  "scope": "./",
+  "name": "SimplyTodo",
+  "short_name": "SimplyTodo",
+  "description": "Simply a todo list",
+  "display": "standalone",
+  "theme_color": "#FF7D29",
+  "background_color": "#FEFFD2",
+  "icons": [
+    { "src": "icons/192px.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/512px.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/512px.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
