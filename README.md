@@ -49,13 +49,17 @@ todo-php/
 
 ### App Manifest
 
-### Cache App Shell
+1. Manifest
 
-### Request Offline
+2. Service Worker
+
+### Cache App Shell
 
 1. Page tidak ada di cache
 
 2. Page ada di cache
+
+3. Add task
 
 ### App Install
 
